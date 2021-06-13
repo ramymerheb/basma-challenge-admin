@@ -53,6 +53,12 @@ function Clients() {
       right: true,
     },
     {
+      name: "Verified at",
+      selector: "email_verified_at",
+      sortable: true,
+      right: true,
+    },
+    {
       name: "Image",
       selector: "image",
       cell: row => <div>{row.image  && <img style={{width:100, height:100}} src={row.image} alt={row.name}></img>}</div>,
@@ -94,6 +100,7 @@ function Clients() {
             }}
             value={email}
           />
+        
           <Button
             onClick={() => {
               clientService
@@ -126,6 +133,7 @@ function Clients() {
           >
             Logout
           </Button>
+        
         </FormLayout.Group>
       </FormLayout>
       <Card title="Login 222">

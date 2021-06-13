@@ -12,12 +12,12 @@ import DataTable from "react-data-table-component";
 import clientService from "./services/client.service";
 import authenticationService from "./services/authentication.service";
 import "./client.css";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 const BACKEND_CLIENTS = process.env.REACT_APP_BACKEND_CLIENTS;
 
 function Clients() {
-    const history = useHistory()
+  const history = useHistory();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -25,11 +25,14 @@ function Clients() {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [hideButton, setHideButton] = useState(false);
 
   useEffect(() => {
     authenticationService.refresh().then(() => {
+      setHideButton(true);
       clientService.getClients(BACKEND_CLIENTS + "1").then((response) => {
         setData(response);
+        setHideButton(false);
       });
     });
   }, []);
@@ -53,15 +56,31 @@ function Clients() {
       right: true,
     },
     {
-      name: "Verified at",
+      name: "Verified",
       selector: "email_verified_at",
       sortable: true,
-      right: true,
+      cell: (row) => (
+        <div>
+          {row.email_verified_at && (
+            <p>Yes</p>
+          )}
+        </div>
+      ),
     },
     {
       name: "Image",
       selector: "image",
-      cell: row => <div>{row.image  && <img style={{width:100, height:100}} src={row.image} alt={row.name}></img>}</div>,
+      cell: (row) => (
+        <div>
+          {row.image && (
+            <img
+              style={{ width: 100, height: 100 }}
+              src={row.image}
+              alt={row.name}
+            ></img>
+          )}
+        </div>
+      ),
       sortable: true,
       right: true,
     },
@@ -72,8 +91,6 @@ function Clients() {
       right: true,
     },
   ];
-
-
 
   return (
     <Page title="Basma Challenge">
@@ -100,44 +117,46 @@ function Clients() {
             }}
             value={email}
           />
-        
-          <Button
-            onClick={() => {
-              clientService
-                .getClients(
-                  BACKEND_CLIENTS +
-                    data +
-                    "&rowsPerPage=" +
-                    rowsPerPage +
-                    "&id=" +
-                    id +
-                    "&name=" +
-                    name +
-                    "&email=" +
-                    email
-                )
-                .then((response) => {
-                  console.log(response);
-                  setData(response);
+          <div hidden={hideButton}>
+            <Button
+              onClick={() => {
+                setHideButton(true);
+                clientService
+                  .getClients(
+                    BACKEND_CLIENTS +
+                      data +
+                      "&rowsPerPage=" +
+                      rowsPerPage +
+                      "&id=" +
+                      id +
+                      "&name=" +
+                      name +
+                      "&email=" +
+                      email
+                  )
+                  .then((response) => {
+                    setData(response);
+                    setHideButton(false);
+                  });
+              }}
+            >
+              Search
+            </Button>
+            <Button
+              onClick={() => {
+                authenticationService.signOut().then(() => {
+                  history.push("/");
                 });
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => {
-              authenticationService.signOut().then(()=>{
-                history.push('/')    
-              })
-            }}
-          >
-            Logout
-          </Button>
-        
+              }}
+            >
+              Logout
+            </Button>
+          </div>
         </FormLayout.Group>
       </FormLayout>
-      <Card title="Login 222">
+      <Card title="Clients">
         <DataTable
+        
           title="Arnold Movies"
           columns={columns}
           data={data.data}
@@ -193,59 +212,70 @@ function Clients() {
       </Card>
       <FormLayout>
         <FormLayout.Group condensed>
-          <Button
-            onClick={() => {
-              clientService.getCount(1).then((response) => {
-                console.log(response);
-                setCount(response.data);
-              });
-            }}
-          >
-            Get count for the last 24 hours
-          </Button>
-          <Button
-            onClick={() => {
-              clientService.getCount(7).then((response) => {
-                console.log(response);
-                setCount(response.data);
-              });
-            }}
-          >
-            Get count for the last week
-          </Button>
-          <Button
-            onClick={() => {
-              clientService.getCount(30).then((response) => {
-                console.log(response);
-                setCount(response.data);
-              });
-            }}
-          >
-            Get count for the last month
-          </Button>
-          <Button
-            onClick={() => {
-              clientService.getCount(90).then((response) => {
-                console.log(response);
-                setCount(response.data);
-              });
-            }}
-          >
-            Get count for the last 3 months
-          </Button>
-          <Button
-            onClick={() => {
-              clientService.getCount(365).then((response) => {
-                console.log(response);
-                setCount(response.data);
-              });
-            }}
-          >
-            Get count for the last year
-          </Button>
+          <div hidden={hideButton}>
+            <Button
+              onClick={() => {
+                setHideButton(true);
+                clientService.getCount(1).then((response) => {
+                  setCount(response.data);
+                  setHideButton(false);
+                });
+              }}
+            >
+              Get count for the last 24 hours
+            </Button>
+            <Button
+              onClick={() => {
+                setHideButton(true);
+                clientService.getCount(7).then((response) => {
+                  console.log(response);
+                  setCount(response.data);
+                  setHideButton(false);
+                });
+              }}
+            >
+              Get count for the last week
+            </Button>
+            <Button
+              onClick={() => {
+                setHideButton(true);
+                clientService.getCount(30).then((response) => {
+                  console.log(response);
+                  setCount(response.data);
+                  setHideButton(false);
+                });
+              }}
+            >
+              Get count for the last month
+            </Button>
+            <Button
+              onClick={() => {
+                setHideButton(true);
+                clientService.getCount(90).then((response) => {
+                  console.log(response);
+                  setCount(response.data);
+                  setHideButton(false);
+                });
+              }}
+            >
+              Get count for the last 3 months
+            </Button>
+            <Button
+              onClick={() => {
+                setHideButton(true);
+                clientService.getCount(365).then((response) => {
+                  console.log(response);
+                  setCount(response.data);
+                  setHideButton(false);
+                });
+              }}
+            >
+              Get count for the last year
+            </Button>
+          </div>
         </FormLayout.Group>
       </FormLayout>
-      <Caption>Count: {count}</Caption>
+      <Caption>Count: {count ? count : 'Please click on an option'}</Caption>
     </Page>
   );
 }

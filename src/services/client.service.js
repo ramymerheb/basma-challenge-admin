@@ -18,7 +18,7 @@ class ClientService {
             alert("Wrong email or password");
           }
           console.log(err.response.status);
-          throw err;
+          return false;
         });
   }
 
@@ -36,7 +36,7 @@ class ClientService {
             alert("Wrong email or password");
           }
           console.log(err.response.status);
-          throw err;
+          return false
         });
   }
 }

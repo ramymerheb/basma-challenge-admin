@@ -21,8 +21,17 @@ class AuthenticationService {
         if (err.response.status === 401) {
           alert("Wrong email or password");
         }
+
+        if (err.response.status === 422) {
+          if(err.response.data['email']){
+            alert(err.response.data['email']);
+          }
+          if(err.response.data['password']){
+            alert(err.response.data['password']);
+          }
+        }
         console.log(err.response.status);
-        throw err;
+        return false;
       });
   };
 

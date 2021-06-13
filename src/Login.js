@@ -9,18 +9,20 @@ import {
 } from "@shopify/polaris";
 import React, { useState } from "react";
 import AuthenticationService from "./services/authentication.service";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 function Login() {
-  const history = useHistory()
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
+  const [hideButton, setHideButton] = useState(false);
 
   const handleSubmit = () => {
+    setHideButton(true);
     if (email === "") {
       setErrors({ ...setErrors, email: "Email is required!" });
       return;
@@ -30,19 +32,22 @@ function Login() {
       setErrors({ ...setErrors, password: "Password is required!" });
       return;
     }
-    let fd = new FormData()
+    let fd = new FormData();
     fd.append("email", email);
     fd.append("password", password);
 
-    AuthenticationService.signin(fd).then((status) =>{
-      if(status){
-        history.push('/clients')    
-
+    AuthenticationService.signin(fd).then((status) => {
+      if (status) {
+        history.push("/clients");
       }
-    })
+      setHideButton(false);
+    });
   };
 
-  const handleEmailChange = (value) => {console.log(value);setEmail(value)};
+  const handleEmailChange = (value) => {
+    console.log(value);
+    setEmail(value);
+  };
   const handlePasswordChange = (value) => setPassword(value);
   return (
     <Page title="Basma Challenge">
@@ -67,8 +72,11 @@ function Login() {
                 requiredIndicator="true"
                 error={errors.password}
               />
-              <Button type="button" onClick={handleSubmit}>Login</Button>
-
+              <div hidden={hideButton}>
+                <Button type="button" onClick={handleSubmit}>
+                  Login
+                </Button>
+              </div>
             </FormLayout>
           </Form>
         </Card.Section>

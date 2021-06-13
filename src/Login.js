@@ -7,7 +7,7 @@ import {
   Button,
   Card,
 } from "@shopify/polaris";
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import AuthenticationService from "./services/authentication.service";
 import { useHistory } from 'react-router-dom'
 

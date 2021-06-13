@@ -55,7 +55,7 @@ function Clients() {
     {
       name: "Image",
       selector: "image",
-      cell: row => <div>{row.image  && <img style={{width:100, height:100}} src={row.image}></img>}</div>,
+      cell: row => <div>{row.image  && <img style={{width:100, height:100}} src={row.image} alt={row.name}></img>}</div>,
       sortable: true,
       right: true,
     },

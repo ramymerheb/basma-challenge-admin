@@ -42,8 +42,8 @@ function Login() {
     })
   };
 
-  const handleEmailChange = useCallback((value) => {console.log(value);setEmail(value)});
-  const handlePasswordChange = useCallback((value) => setPassword(value), []);
+  const handleEmailChange = (value) => {console.log(value);setEmail(value)};
+  const handlePasswordChange = (value) => setPassword(value);
   return (
     <Page title="Basma Challenge">
       <Card title="Login">

@@ -24,11 +24,13 @@ function Login() {
   const handleSubmit = () => {
     setHideButton(true);
     if (email === "") {
+      setHideButton(false);
       setErrors({ ...setErrors, email: "Email is required!" });
       return;
     }
 
     if (password === "") {
+      setHideButton(false);
       setErrors({ ...setErrors, password: "Password is required!" });
       return;
     }
